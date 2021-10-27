@@ -52,6 +52,7 @@ void initmem(strategies strategy, size_t sz)
     /* all implementations will need an actual block of memory to use */
     mySize = sz;
 
+    struct memoryList *trav;
     if (myMemory != NULL) free(myMemory); /* in case this is not the first time initmem2 is called */
     /* TODO: release any other memory you were using for bookkeeping when doing a re-initialization! Maybe this works? */
     if (head != NULL){
@@ -61,6 +62,7 @@ void initmem(strategies strategy, size_t sz)
         }
     }
     free(head);
+
 
 
     //Allocating a block of memory with size sz
