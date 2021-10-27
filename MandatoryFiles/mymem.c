@@ -54,6 +54,12 @@ void initmem(strategies strategy, size_t sz)
 
     if (myMemory != NULL) free(myMemory); /* in case this is not the first time initmem2 is called */
     /* TODO: release any other memory you were using for bookkeeping when doing a re-initialization! Maybe this works? */
+    if (head != NULL){
+        for(trav=head;trav->next != NULL; trav=trav->next){
+            free(trav->last);
+            free(trav);
+        }
+    }
     free(head);
 
 
@@ -68,10 +74,8 @@ void initmem(strategies strategy, size_t sz)
     //Setting the pointer for our doubly linked list to point to our block of memory that we've allocated
     head -> ptr = myMemory;
     /* TODO: Initialize memory management structure. */
-    next = head;
-    /* Memory list should be circular for next-fit */
-    head->last = head;
-    head->next = head;
+    head->last = NULL;
+    head->next = NULL;
 
 
 }
