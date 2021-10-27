@@ -48,19 +48,30 @@ static struct memoryList *next;
 
 void initmem(strategies strategy, size_t sz)
 {
-	myStrategy = strategy;
+    myStrategy = strategy;
+    /* all implementations will need an actual block of memory to use */
+    mySize = sz;
 
-	/* all implementations will need an actual block of memory to use */
-	mySize = sz;
-
-	if (myMemory != NULL) free(myMemory); /* in case this is not the first time initmem2 is called */
-
-	/* TODO: release any other memory you were using for bookkeeping when doing a re-initialization! */
+    if (myMemory != NULL) free(myMemory); /* in case this is not the first time initmem2 is called */
+    /* TODO: release any other memory you were using for bookkeeping when doing a re-initialization! Maybe this works? */
+    free(head);
 
 
-	myMemory = malloc(sz);
-	
-	/* TODO: Initialize memory management structure. */
+    //Allocating a block of memory with size sz
+    myMemory = malloc(sz);
+    //Allocating a block of memory for our struct, so it can keep track of the other block of memory we allocated
+    head = malloc(sizeof(struct memoryList));
+    //Setting the size tracker of the struct to be the size of our allocated memory block
+    head -> size = sz;
+    //Setting the amount of allocated memory in our memory block to be equal 0 since we've yet to deposit any information in it
+    head -> alloc = 0;
+    //Setting the pointer for our doubly linked list to point to our block of memory that we've allocated
+    head -> ptr = myMemory;
+    /* TODO: Initialize memory management structure. */
+    next = head;
+    /* Memory list should be circular for next-fit */
+    head->last = head;
+    head->next = head;
 
 
 }
