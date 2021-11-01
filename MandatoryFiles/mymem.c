@@ -213,7 +213,8 @@ int mem_small_free(int size) {
         if (current->alloc != 0 && current->size <= size) {
             i++;
         }
-    } while (current->next != head);
+        current = current->next;
+    } while (current!= head);
     return i;
 }
 
