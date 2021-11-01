@@ -11,15 +11,16 @@
  * You may change this to fit your implementation.
  */
 
-struct memoryList {
-    // doubly-linked list
-    struct memoryList *last;
-    struct memoryList *next;
+struct memoryList
+{
+  // doubly-linked list
+  struct memoryList *last;
+  struct memoryList *next;
 
-    int size;            // How many bytes in this block?
-    char alloc;          // 1 if this block is allocated,
-    // 0 if this block is free.
-    void *ptr;           // location of block in memory pool.
+  int size;            // How many bytes in this block?
+  char alloc;          // 1 if this block is allocated,
+                       // 0 if this block is free.
+  void *ptr;           // location of block in memory pool.
 };
 
 strategies myStrategy = NotSet;    // Current strategy
@@ -157,9 +158,16 @@ void myfree(void *block) {
  */
 
 /* Get the number of contiguous areas of free space in memory. */
-int mem_holes() {
-    return 0;
-}
+int mem_holes()
+{
+    int i = 0;
+    struct memoryList* current = head;
+    do{
+        if (current->last->alloc == 0 && current->next->alloc != 0){
+            i++;
+        }
+    } while (current->next != head);
+    return i;}
 
 /* Get the number of bytes allocated */
 int mem_allocated() {
@@ -273,12 +281,12 @@ void print_memory() {
     struct memoryList *current = head;
     do {
         printf("Block=%i\\;"
-               "\n\tsize=%lu"
+               "\n\tsize=%d"
                "\n\talloc=%c"
-               "\n", i, sizeof(&current), current->alloc);
+               "\n",i,current->size,current->alloc ? [1] : [0]);
         i++;
     } while (current->next != head);
-    return;
+	return;
 }
 
 /* Use this function to track memory allocation performance.  
