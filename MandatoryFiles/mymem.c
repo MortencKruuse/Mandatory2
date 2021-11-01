@@ -89,6 +89,10 @@ void initmem(strategies strategy, size_t sz) {
  */
 
 void *mymalloc(size_t requested) {
+    if(requested <= 0){
+        printf("Can not allocate memory of given size %zu \n",requested);
+        return NULL;
+    }
     assert((int) myStrategy > 0);
     struct memoryList *temp = head;
     bool found = false;
@@ -350,7 +354,7 @@ void try_mymem() {
 
             initmem(strat, 500);
 
-    a = mymalloc(100);
+    a = mymalloc(0);
     b = mymalloc(100);
     c = mymalloc(100);
     myfree(b);
