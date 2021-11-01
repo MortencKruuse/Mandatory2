@@ -27,4 +27,4 @@ char mem_is_alloc(void *ptr);
 void* mem_pool();
 void print_memory();
 void print_memory_status();
-void try_mymem(int argc, char **argv);
+void try_mymem();
