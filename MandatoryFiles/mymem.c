@@ -124,8 +124,14 @@ void myfree(void* block)
 /* Get the number of contiguous areas of free space in memory. */
 int mem_holes()
 {
-	return 0;
-}
+    int i = 0;
+    struct memoryList* current = head;
+    do{
+        if (current->last->alloc == 0 && current->next->alloc != 0){
+            i++;
+        }
+    } while (current->next != head);
+    return i;}
 
 /* Get the number of bytes allocated */
 int mem_allocated()
@@ -175,7 +181,8 @@ int mem_small_free(int size)
             i++;
         }
     } while (current->next != head);
-    return i;}
+    return i;
+}
 
 char mem_is_alloc(void *ptr)
 {
