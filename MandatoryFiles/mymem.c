@@ -130,26 +130,52 @@ int mem_holes()
 /* Get the number of bytes allocated */
 int mem_allocated()
 {
-	return 0;
-}
+    int i = 0;
+    struct memoryList* current = head;
+    do{
+        if (current->alloc == 1){
+            i += current->size;
+        }
+    } while (current->next != head);
+    return i;}
 
 /* Number of non-allocated bytes */
 int mem_free()
 {
-	return 0;
+    int i = 0;
+    struct memoryList* current = head;
+    do{
+        if (current->alloc == 0){
+            i += current->size;
+        }
+    } while (current->next != head);
+	return i;
 }
 
 /* Number of bytes in the largest contiguous area of unallocated memory */
 int mem_largest_free()
 {
-	return 0;
+    int i = 0;
+    struct memoryList* current = head;
+    do{
+        if (current->alloc != 0 & i < current->alloc){
+            i = current->size;
+        }
+    } while (current->next != head);
+    return i;
 }
 
 /* Number of free blocks smaller than or equal to "size" bytes. */
 int mem_small_free(int size)
 {
-	return 0;
-}       
+    int i = 0;
+    struct memoryList* current = head;
+    do{
+        if (current->alloc != 0 && current->size <= size){
+            i++;
+        }
+    } while (current->next != head);
+    return i;}
 
 char mem_is_alloc(void *ptr)
 {
@@ -233,7 +259,7 @@ void print_memory()
         printf("Block=%i\\;"
                "\n\tsize=%lu"
                "\n\talloc=%c"
-               "",i,sizeof(&current),current->alloc);
+               "\n",i,sizeof(&current),current->alloc);
         i++;
     } while (current->next != head);
 	return;
