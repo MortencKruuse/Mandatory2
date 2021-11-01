@@ -138,7 +138,7 @@ int mem_largest_free()
     return 0;
 }
 
-/* Number of free blocks smaller than "size" bytes. */
+/* Number of free blocks smaller or equals to "size" bytes. */
 int mem_small_free(int size)
 {
     return 0;

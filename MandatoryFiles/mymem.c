@@ -75,9 +75,9 @@ void initmem(strategies strategy, size_t sz)
     head -> alloc = 0;
     //Setting the pointer for our doubly linked list to point to our block of memory that we've allocated
     head -> ptr = myMemory;
-    /* TODO: Initialize memory management structure. */
-    head->last = NULL;
-    head->next = NULL;
+    /* TODO: Initialize memory management structure. Done */
+    head->last = head;
+    head->next = head;
 
 
 }
@@ -91,13 +91,21 @@ void initmem(strategies strategy, size_t sz)
 void *mymalloc(size_t requested)
 {
 	assert((int)myStrategy > 0);
+    struct memoryList *temp = head;
 	
 	switch (myStrategy)
 	  {
 	  case NotSet: 
 	            return NULL;
 	  case First:
-	            return NULL;
+          do {
+              if(temp->size >= requested && temp->alloc == 0){
+                  break;
+              }
+              temp=temp->next;
+          }while(temp!=head);
+          break;
+
 	  case Best:
 	            return NULL;
 	  case Worst:
@@ -105,7 +113,19 @@ void *mymalloc(size_t requested)
 	  case Next:
 	            return NULL;
 	  }
+      //allocate new block if > size
+      if(temp->size > requested){
+          struct memoryList *leftovers = malloc(sizeof(struct memoryList));
+          leftovers->next = temp->next;
+          leftovers->next->last = leftovers;
+          leftovers->last = temp;
+          temp->next = leftovers;
+      }
+
 	return NULL;
+
+
+
 }
 
 
