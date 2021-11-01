@@ -289,7 +289,8 @@ void print_memory() {
                "\n\talloc=%s"
                "\n",i,current->size,current->alloc ? "1" : "0");
         i++;
-    } while (current->next != head);
+        current = current->next;
+    } while (current != head);
 	return;
 }
 
