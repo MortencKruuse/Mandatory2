@@ -230,7 +230,10 @@ void print_memory()
     int i = 0;
     struct memoryList* current = head;
     do{
-        printf("Block=%i\\; Holds:",i);
+        printf("Block=%i\\;"
+               "\n\tsize=%lu"
+               "\n\talloc=%c"
+               "",i,sizeof(&current),current->alloc);
         i++;
     } while (current->next != head);
 	return;
