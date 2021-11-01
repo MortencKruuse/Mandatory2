@@ -227,6 +227,12 @@ strategies strategyFromString(char * strategy)
 /* Use this function to print out the current contents of memory. */
 void print_memory()
 {
+    int i = 0;
+    struct memoryList* current = head;
+    do{
+        printf("Block=%i\\; Holds:",i);
+        i++;
+    } while (current->next != head);
 	return;
 }
 
