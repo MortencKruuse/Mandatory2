@@ -284,9 +284,9 @@ void print_memory()
     struct memoryList* current = head;
     do{
         printf("Block=%i\\;"
-               "\n\tsize=%lu"
+               "\n\tsize=%d"
                "\n\talloc=%c"
-               "\n",i,current->size,current->alloc);
+               "\n",i,current->size,current->alloc ? 1 : 0);
         i++;
     } while (current->next != head);
 	return;
