@@ -177,7 +177,8 @@ int mem_allocated() {
         if (current->alloc == 1) {
             i += current->size;
         }
-    } while (current->next != head);
+        current = current->next;
+    } while (current != head);
     return i;
 }
 
@@ -189,7 +190,8 @@ int mem_free() {
         if (current->alloc == 0) {
             i += current->size;
         }
-    } while (current->next != head);
+        current = current->next;
+    } while (current != head);
     return i;
 }
 
@@ -201,7 +203,8 @@ int mem_largest_free() {
         if (current->alloc != 0 & i < current->alloc) {
             i = current->size;
         }
-    } while (current->next != head);
+        current = current->next;
+    } while (current != head);
     return i;
 }
 
