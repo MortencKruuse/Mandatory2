@@ -75,9 +75,9 @@ void initmem(strategies strategy, size_t sz)
     head -> alloc = 0;
     //Setting the pointer for our doubly linked list to point to our block of memory that we've allocated
     head -> ptr = myMemory;
-    /* TODO: Initialize memory management structure. */
-    head->last = NULL;
-    head->next = NULL;
+    /* TODO: Initialize memory management structure. Done */
+    head->last = head;
+    head->next = head;
 
 
 }
