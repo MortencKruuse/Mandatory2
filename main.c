@@ -1,6 +1,6 @@
-#include "MandatoryFiles/mymem.h"
+#include "MandatoryFiles/mymem.c"
 
 
-int main(int argc, char *argv[]) {
-    try_mymem(0,  **argv);
+int main() {
+    try_mymem();
 }
