@@ -282,8 +282,8 @@ void print_memory() {
     do {
         printf("Block=%i\\;"
                "\n\tsize=%d"
-               "\n\talloc=%c"
-               "\n",i,current->size,current->alloc ? [1] : [0]);
+               "\n\talloc=%s"
+               "\n",i,current->size,current->alloc ? "1" : "0");
         i++;
     } while (current->next != head);
 	return;
