@@ -296,6 +296,8 @@ void print_memory_status() {
  * implementations are called.  Run "mem -try <args>" to call this function.
  * We have given you a simple example to start.
  */
+
+/*
 void try_mymem(int argc, char **argv) {
     strategies strat;
     void *a, *b, *c, *d, *e;
@@ -305,10 +307,35 @@ void try_mymem(int argc, char **argv) {
         strat = First;
 
 
-    /* A simple example.
-       Each algorithm should produce a different layout. */
+     A simple example.
+       Each algorithm should produce a different layout.
 
     initmem(strat, 500);
+
+    a = mymalloc(100);
+    b = mymalloc(100);
+    c = mymalloc(100);
+    myfree(b);
+    d = mymalloc(50);
+    myfree(a);
+    e = mymalloc(25);
+
+    print_memory();
+    print_memory_status();
+
+}
+*/
+
+void try_mymem() {
+    strategies strat;
+    void *a, *b, *c, *d, *e;
+    strat = First;
+
+
+    /*A simple example.
+    Each algorithm should produce a different layout.*/
+
+            initmem(strat, 500);
 
     a = mymalloc(100);
     b = mymalloc(100);
