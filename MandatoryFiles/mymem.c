@@ -383,7 +383,6 @@ void try_mymem() {
     d = mymalloc(50);
     myfree(a);
     e = mymalloc(25);
-
     print_memory();
     print_memory_status();
 }
