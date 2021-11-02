@@ -107,7 +107,7 @@ void *mymalloc(size_t requested) {
         case Best:
 
             do{
-                if(temp->size - requested > 0 && temp->size - requested < foundblock->size - requested && temp->alloc == 0){
+                if(temp->size - requested >= 0 && (temp->size - requested) < (foundblock->size - requested) && temp->alloc == 0){
                     foundblock = temp;
                 }
                 temp = temp->next;
@@ -430,8 +430,8 @@ void try_mymem(int argc, char **argv) {
 
 void try_mymem() {
     strategies strat;
-    void *a, *b, *c, *d, *e, *q;
-    strat = Next;
+    void *a, *b, *c, *d, *e, *f, *g;
+    strat = Best;
 
     /*A simple example.
     Each algorithm should produce a different layout.*/
@@ -440,15 +440,21 @@ void try_mymem() {
     // TODO If a gets allocated more than 0 memory everything dies. See TODO above "myfree(a)".
 
     a = mymalloc(100);
-    b = mymalloc(100);
-    c = mymalloc(100);
-    print_memory_with_id('a');
+    print_memory();
+    b = mymalloc(200);
+    print_memory();
+    c = mymalloc(50);
+    print_memory();
     myfree(b);
-    print_memory_with_id('b');
     d = mymalloc(50);
-    //print_memory_status();
+    e = mymalloc(40);
+    myfree(d);
+    //print_memory_with_id('a');
+    f = mymalloc(50);
+    //print_memory_with_id('b');
+    g =mymalloc(10);
+    myfree(f);
     // TODO Attach debug boii right below this line. Follow it until you are in mymfree right before "free(previousBlock)". Look at the next pointers. They the same as the current blocks.
-    //myfree(a);
-    e = mymalloc(25);
+    print_memory();
     print_memory_status();
 }
