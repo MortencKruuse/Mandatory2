@@ -83,6 +83,8 @@ void *mymalloc(size_t requested) {
         return NULL;
     }
     assert((int) myStrategy > 0);
+    assert( requested >= 1);
+
     struct memoryList *temp = head;
     struct memoryList *foundblock = head;
     bool found = false;
@@ -325,12 +327,36 @@ void print_memory() {
     int i = 0;
     struct memoryList *current = head;
     do {
-        printf("Block=%i\\;"
+        printf("Block=%i;"
                "\n\tsize=%d"
                "\n\talloc=%s"
                "\n\taddress=%p"
                "\n\tlast=%p"
                "\n\tnext=%p"
+               "\n", i, current->size, current->alloc ? "1" : "0", (void*)current,(void*)current->next,(void*)current->last);
+        i++;
+        current = current->next;
+    } while (current != head);
+    return;
+}
+
+
+/*
+ * These functions are for you to modify however you see fit.  These will not
+ * be used in tests, but you may find them useful for debugging.
+ */
+/* Use this function to print out the current contents of memory. */
+void print_memory_with_id(char id) {
+    int i = 0;
+    struct memoryList *current = head;
+    printf("ID=%c\n",id)
+    do {
+        printf("\tBlock=%i;"
+               "\n\t\tsize=%d"
+               "\n\t\talloc=%s"
+               "\n\t\taddress=%p"
+               "\n\t\tlast=%p"
+               "\n\t\tnext=%p"
                "\n", i, current->size, current->alloc ? "1" : "0", (void*)current,(void*)current->next,(void*)current->last);
         i++;
         current = current->next;
@@ -392,12 +418,12 @@ void try_mymem() {
     initmem(strat, 500);
 
     // TODO If a gets allocated more than 0 memory everything dies. See TODO above "myfree(a)".
-    //a = mymalloc(0);
+    a = mymalloc(0);
     b = mymalloc(100);
     c = mymalloc(100);
     myfree(b);
     d = mymalloc(50);
-    //print_memory();
+    print_memory_with_id('a');
     //print_memory_status();
     // TODO Attach debug boii right below this line. Follow it until you are in mymfree right before "free(previousBlock)". Look at the next pointers. They the same as the current blocks.
     //myfree(a);
