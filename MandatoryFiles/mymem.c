@@ -104,7 +104,18 @@ void *mymalloc(size_t requested) {
             break;
 
         case Best:
-            return NULL;
+
+            do{
+                if(temp->size - requested > 0 && temp->size - requested < foundblock->size - requested && temp->alloc == 0){
+                    foundblock = temp;
+                }
+                temp = temp->next;
+            } while (temp !=head);
+            if(foundblock->size >= requested){
+                found = true;
+                break;
+            } else break;
+
         case Worst:
 
             do{
