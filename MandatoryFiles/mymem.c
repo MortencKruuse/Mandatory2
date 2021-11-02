@@ -379,15 +379,15 @@ void try_mymem() {
     Each algorithm should produce a different layout.*/
     initmem(strat, 500);
 
-    // TODO If a gets allocated more than 0 memory everything dies.
+    // TODO If a gets allocated more than 0 memory everything dies. See TODO above "myfree(a)".
     a = mymalloc(1);
-
-    print_memory();
-    print_memory_status();
     b = mymalloc(100);
     c = mymalloc(100);
     myfree(b);
     d = mymalloc(50);
+    print_memory();
+    print_memory_status();
+    // TODO Attach debug boii right below this line. Follow it until you are in mymfree right before "free(previousBlock)". Look at the next pointers. They the same as the current blocks.
     myfree(a);
     e = mymalloc(25);
     print_memory();
