@@ -169,8 +169,8 @@ void myfree(void *block) {
             found = true;
             break;
         }
-        current->next = current;
-    } while (current->next != head);
+        current = current->next;
+    } while (current != head);
     // Check if the last block has 0 allocated. If so then it should be combined with the current block.
     if (found) {
         if (current->last->alloc == 0) {
@@ -349,7 +349,7 @@ void print_memory() {
 void print_memory_with_id(char id) {
     int i = 0;
     struct memoryList *current = head;
-    printf("ID=%c\n",id)
+    printf("ID=%c\n",id);
     do {
         printf("\tBlock=%i;"
                "\n\t\tsize=%d"
@@ -410,7 +410,7 @@ void try_mymem(int argc, char **argv) {
 
 void try_mymem() {
     strategies strat;
-    void *a, *b, *c, *d, *e;
+    void *a, *b, *c, *d, *e, *q;
     strat = First;
 
     /*A simple example.
@@ -418,16 +418,17 @@ void try_mymem() {
     initmem(strat, 500);
 
     // TODO If a gets allocated more than 0 memory everything dies. See TODO above "myfree(a)".
-    a = mymalloc(0);
+
+    a = mymalloc(100);
     b = mymalloc(100);
     c = mymalloc(100);
-    myfree(b);
-    d = mymalloc(50);
     print_memory_with_id('a');
+    myfree(b);
+    print_memory_with_id('b');
+    d = mymalloc(50);
     //print_memory_status();
     // TODO Attach debug boii right below this line. Follow it until you are in mymfree right before "free(previousBlock)". Look at the next pointers. They the same as the current blocks.
     //myfree(a);
     e = mymalloc(25);
-    print_memory();
     print_memory_status();
 }
