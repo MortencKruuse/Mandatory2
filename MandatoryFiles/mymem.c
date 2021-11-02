@@ -114,7 +114,6 @@ void *mymalloc(size_t requested) {
      */
     if (found) {
         if (temp->size > requested) {
-            // TODO Den går ind i myfree() her
             struct memoryList *leftovers = malloc(sizeof(struct memoryList));
             leftovers->next = temp->next;
             leftovers->next->last = leftovers;
