@@ -70,8 +70,6 @@ void initmem(strategies strategy, size_t sz) {
     /* TODO: Initialize memory management structure. Done */
     head->last = head;
     head->next = head;
-
-
 }
 
 /* Allocate a block of memory with the requested size.
@@ -116,7 +114,6 @@ void *mymalloc(size_t requested) {
      */
     if (found) {
         if (temp->size > requested) {
-            // TODO Den går ind i myfree() her
             struct memoryList *leftovers = malloc(sizeof(struct memoryList));
             leftovers->next = temp->next;
             leftovers->next->last = leftovers;
@@ -378,6 +375,7 @@ void try_mymem() {
     Each algorithm should produce a different layout.*/
     initmem(strat, 500);
 
+    // TODO If a gets allocated more than 0 memory everything dies.
     a = mymalloc(0);
     b = mymalloc(100);
     c = mymalloc(100);
