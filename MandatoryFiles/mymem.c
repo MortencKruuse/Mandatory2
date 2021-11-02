@@ -144,7 +144,7 @@ void *mymalloc(size_t requested) {
 /* Frees a block of memory previously allocated by mymalloc. */
 void myfree(void *block) {
     if (block == NULL) {
-        printf("Tried to free a NULL block \n", block);
+        printf("Tried to free a NULL block \n");
         return;
     }
     // Create memoryList and search for the targeted block
@@ -317,7 +317,10 @@ void print_memory() {
         printf("Block=%i\\;"
                "\n\tsize=%d"
                "\n\talloc=%s"
-               "\n", i, current->size, current->alloc ? "1" : "0");
+               "\n\taddress=%p"
+               "\n\tlast=%p"
+               "\n\tnext=%p"
+               "\n", i, current->size, current->alloc ? "1" : "0", (void*)current,(void*)current->next,(void*)current->last);
         i++;
         current = current->next;
     } while (current != head);
@@ -378,7 +381,11 @@ void try_mymem() {
     Each algorithm should produce a different layout.*/
     initmem(strat, 500);
 
-    a = mymalloc(0);
+    a = mymalloc(1);
+
+    print_memory();
+    print_memory_status();
+
     b = mymalloc(100);
     c = mymalloc(100);
     myfree(b);
