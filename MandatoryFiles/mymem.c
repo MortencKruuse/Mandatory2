@@ -131,14 +131,13 @@ void *mymalloc(size_t requested) {
 
         case Next:
             do {
-                temp = foundblock;
                 if (temp->size >= requested && temp->alloc == 0) {
                     foundblock = temp;
                     found = true;
                     break;
                 }
                 temp = temp->next;
-            } while (temp != foundblock);
+            } while (temp != head);
             break;
     }
 
@@ -431,7 +430,7 @@ void try_mymem(int argc, char **argv) {
 void try_mymem() {
     strategies strat;
     void *a, *b, *c, *d, *e, *q;
-    strat = First;
+    strat = Next;
 
     /*A simple example.
     Each algorithm should produce a different layout.*/
