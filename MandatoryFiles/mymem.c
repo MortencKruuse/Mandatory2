@@ -84,6 +84,7 @@ void *mymalloc(size_t requested) {
     }
     assert((int) myStrategy > 0);
     struct memoryList *temp = head;
+    struct memoryList *foundblock = head;
     bool found = false;
 
     switch (myStrategy) {
@@ -92,6 +93,7 @@ void *mymalloc(size_t requested) {
         case First:
             do {
                 if (temp->size >= requested && temp->alloc == 0) {
+                    foundblock = temp;
                     found = true;
                     break;
                 }
@@ -102,7 +104,18 @@ void *mymalloc(size_t requested) {
         case Best:
             return NULL;
         case Worst:
-            return NULL;
+
+            do{
+                if(temp->size > foundblock->size && temp->alloc == 0){
+                    foundblock = temp;
+                }
+                temp = temp->next;
+            } while (temp !=head);
+            if(foundblock->size >= requested){
+                found = true;
+                break;
+            } else break;
+
         case Next:
             return NULL;
     }
@@ -113,24 +126,24 @@ void *mymalloc(size_t requested) {
      * The if statement updates the pointers for both blocks and sizes
      */
     if (found) {
-        if (temp->size > requested) {
+        if (foundblock->size > requested) {
             struct memoryList *leftovers = malloc(sizeof(struct memoryList));
-            leftovers->next = temp->next;
+            leftovers->next = foundblock->next;
             leftovers->next->last = leftovers;
-            leftovers->last = temp;
-            temp->next = leftovers;
+            leftovers->last = foundblock;
+            foundblock->next = leftovers;
 
-            leftovers->size = temp->size - requested;
-            temp->size = requested;
+            leftovers->size = foundblock->size - requested;
+            foundblock->size = requested;
 
             leftovers->alloc = 0;
-            leftovers->ptr = temp->ptr + requested;
+            leftovers->ptr = foundblock->ptr + requested;
 
             //for later next* should be updated here
-        } else { next = temp->next; }
+        } else { next = foundblock->next; }
 
-        temp->alloc = 1;
-        return temp->ptr;
+        foundblock->alloc = 1;
+        return foundblock->ptr;
     } else {
         printf("No memory block of the %zu size found\n", requested);
         return NULL;
@@ -379,15 +392,15 @@ void try_mymem() {
     initmem(strat, 500);
 
     // TODO If a gets allocated more than 0 memory everything dies. See TODO above "myfree(a)".
-    a = mymalloc(1);
+    //a = mymalloc(0);
     b = mymalloc(100);
     c = mymalloc(100);
     myfree(b);
     d = mymalloc(50);
-    print_memory();
-    print_memory_status();
+    //print_memory();
+    //print_memory_status();
     // TODO Attach debug boii right below this line. Follow it until you are in mymfree right before "free(previousBlock)". Look at the next pointers. They the same as the current blocks.
-    myfree(a);
+    //myfree(a);
     e = mymalloc(25);
     print_memory();
     print_memory_status();
