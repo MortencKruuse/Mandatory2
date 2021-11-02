@@ -6,32 +6,25 @@
 #include <time.h>
 #include <stdbool.h>
 
-
 /* The main structure for implementing memory allocation.
  * You may change this to fit your implementation.
  */
+struct memoryList {
+    // doubly-linked list
+    struct memoryList *last;
+    struct memoryList *next;
 
-struct memoryList
-{
-  // doubly-linked list
-  struct memoryList *last;
-  struct memoryList *next;
-
-  int size;            // How many bytes in this block?
-  char alloc;          // 1 if this block is allocated,
-                       // 0 if this block is free.
-  void *ptr;           // location of block in memory pool.
+    int size;            // How many bytes in this block?
+    char alloc;          // 1 if this block is allocated,
+    // 0 if this block is free.
+    void *ptr;           // location of block in memory pool.
 };
 
 strategies myStrategy = NotSet;    // Current strategy
-
-
 size_t mySize;
 void *myMemory = NULL;
-
 static struct memoryList *head;
 static struct memoryList *next;
-
 
 /* initmem must be called prior to mymalloc and myfree.
 
@@ -46,7 +39,6 @@ static struct memoryList *next;
 		- "next" (next-fit)
    sz specifies the number of bytes that will be available, in total, for all mymalloc requests.
 */
-
 void initmem(strategies strategy, size_t sz) {
     myStrategy = strategy;
     /* all implementations will need an actual block of memory to use */
@@ -87,10 +79,9 @@ void initmem(strategies strategy, size_t sz) {
  *  Otherwise, it returns a pointer to the newly allocated block.
  *  Restriction: requested >= 1 
  */
-
 void *mymalloc(size_t requested) {
-    if(requested <= 0){
-        printf("Can not allocate memory of given size %zu \n",requested);
+    if (requested <= 0) {
+        printf("Can not allocate memory of given size %zu \n", requested);
         return NULL;
     }
     assert((int) myStrategy > 0);
@@ -99,7 +90,7 @@ void *mymalloc(size_t requested) {
 
     switch (myStrategy) {
         case NotSet:
-            return NULL;
+            return printf("err", "Strategy not implemented.");
         case First:
             do {
                 if (temp->size >= requested && temp->alloc == 0) {
@@ -123,8 +114,9 @@ void *mymalloc(size_t requested) {
      * and if so should be allocated to a new block.
      * The if statement updates the pointers for both blocks and sizes
      */
-    if(found) {
+    if (found) {
         if (temp->size > requested) {
+            // TODO Den går ind i myfree() her
             struct memoryList *leftovers = malloc(sizeof(struct memoryList));
             leftovers->next = temp->next;
             leftovers->next->last = leftovers;
@@ -135,7 +127,6 @@ void *mymalloc(size_t requested) {
             temp->size = requested;
 
             leftovers->alloc = 0;
-
             leftovers->ptr = temp->ptr + requested;
 
             //for later next* should be updated here
@@ -143,15 +134,55 @@ void *mymalloc(size_t requested) {
 
         temp->alloc = 1;
         return temp->ptr;
-    } else{
-        printf("No memory block of the %zu size found\n",requested);
-        return  NULL;}
+    } else {
+        printf("No memory block of the %zu size found\n", requested);
+        return NULL;
+    }
 
 }
 
-
 /* Frees a block of memory previously allocated by mymalloc. */
 void myfree(void *block) {
+    if (block == NULL) {
+        printf("Tried to free a NULL block \n", block);
+        return;
+    }
+    // Create memoryList and search for the targeted block
+    struct memoryList *current = head;
+    bool found = false;
+    do {
+        // If block is found. Then lets free it and leave the while loop :)
+        if (current->ptr == block) {
+            current->alloc = 0;
+            found = true;
+            break;
+        }
+        current->next = current;
+    } while (current->next != head);
+    // Check if the last block has 0 allocated. If so then it should be combined with the current block.
+    if (found) {
+        if (current->last->alloc == 0) {
+            struct memoryList *previousBlock = current->last;
+            // Combine the size of current with the size of the previous block
+            current->size = (previousBlock->size) + (current->size);
+            // Adjust the pointers
+            previousBlock->last->next = current;
+            current->last = previousBlock->last;
+            // Free previous block to stop memory leak
+            free(previousBlock);
+        }
+        // Check if the next block has 0 allocated. If so then it should be combined with the current block.
+        if (current->next->alloc == 0) {
+            struct memoryList *nextBlock = current->next;
+            // Combine the size of current with the size of the next block
+            current->size = (nextBlock->size) + (current->size);
+            // Adjust the pointers
+            nextBlock->next->last = current;
+            current->next = nextBlock->next;
+            // Free next block to stop memory leak
+            free(nextBlock);
+        }
+    }
     return;
 }
 
@@ -162,16 +193,16 @@ void myfree(void *block) {
  */
 
 /* Get the number of contiguous areas of free space in memory. */
-int mem_holes()
-{
+int mem_holes() {
     int i = 0;
-    struct memoryList* current = head;
-    do{
-        if (current->last->alloc == 0 && current->next->alloc != 0){
+    struct memoryList *current = head;
+    do {
+        if (current->last->alloc == 0 && current->next->alloc != 0) {
             i++;
         }
     } while (current->next != head);
-    return i;}
+    return i;
+}
 
 /* Get the number of bytes allocated */
 int mem_allocated() {
@@ -221,7 +252,7 @@ int mem_small_free(int size) {
             i++;
         }
         current = current->next;
-    } while (current!= head);
+    } while (current != head);
     return i;
 }
 
@@ -233,8 +264,6 @@ char mem_is_alloc(void *ptr) {
  * Feel free to use these functions, but do not modify them.  
  * The test code uses them, but you may find them useful.
  */
-
-
 //Returns a pointer to the memory pool.
 void *mem_pool() {
     return myMemory;
@@ -244,7 +273,6 @@ void *mem_pool() {
 int mem_total() {
     return mySize;
 }
-
 
 // Get string name for a strategy. 
 char *strategy_name(strategies strategy) {
@@ -277,12 +305,10 @@ strategies strategyFromString(char *strategy) {
     }
 }
 
-
 /* 
  * These functions are for you to modify however you see fit.  These will not
  * be used in tests, but you may find them useful for debugging.
  */
-
 /* Use this function to print out the current contents of memory. */
 void print_memory() {
     int i = 0;
@@ -291,11 +317,11 @@ void print_memory() {
         printf("Block=%i\\;"
                "\n\tsize=%d"
                "\n\talloc=%s"
-               "\n",i,current->size,current->alloc ? "1" : "0");
+               "\n", i, current->size, current->alloc ? "1" : "0");
         i++;
         current = current->next;
     } while (current != head);
-	return;
+    return;
 }
 
 /* Use this function to track memory allocation performance.  
@@ -348,11 +374,9 @@ void try_mymem() {
     void *a, *b, *c, *d, *e;
     strat = First;
 
-
     /*A simple example.
     Each algorithm should produce a different layout.*/
-
-            initmem(strat, 500);
+    initmem(strat, 500);
 
     a = mymalloc(0);
     b = mymalloc(100);
@@ -364,5 +388,4 @@ void try_mymem() {
 
     print_memory();
     print_memory_status();
-
 }
