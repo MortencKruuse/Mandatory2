@@ -198,7 +198,8 @@ int mem_holes() {
         if (current->last->alloc == 0 && current->next->alloc != 0) {
             i++;
         }
-    } while (current->next != head);
+        current = current->next;
+    } while (current != head);
     return i;
 }
 
@@ -331,8 +332,7 @@ void print_memory() {
  */
 void print_memory_status() {
     printf("%d out of %d bytes allocated.\n", mem_allocated(), mem_total());
-    printf("%d bytes are free in %d holes; maximum allocatable block is %d bytes.\n", mem_free(), mem_holes(),
-           mem_largest_free());
+    printf("%d bytes are free in %d holes; maximum allocatable block is %d bytes.\n", mem_free(),mem_holes(),mem_largest_free());
     printf("Average hole size is %f.\n\n", ((float) mem_free()) / mem_holes());
 }
 
