@@ -168,7 +168,7 @@ void *mymalloc(size_t requested) {
             leftovers->ptr = foundblock->ptr + requested;
 
             //for later next* should be updated here
-            //next = foundblock->next;
+            next = foundblock->next;
         } else { next = foundblock->next; }
 
         foundblock->alloc = 1;
@@ -438,7 +438,7 @@ void try_mymem(int argc, char **argv) {
 void try_mymem() {
     strategies strat;
     void *a, *b, *c, *d, *e, *f, *g;
-    strat = Best;
+    strat = Next;
 
     /*A simple example.
     Each algorithm should produce a different layout.*/
