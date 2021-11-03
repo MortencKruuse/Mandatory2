@@ -60,14 +60,6 @@ void initmem(strategies strategy, size_t sz) {
     }
     else free(head);
 
-    //free next*
-    if (next != NULL) {
-        for (trav2 = next; trav2->next != NULL; trav2 = trav2->next) {
-            free(trav2->last);
-        }
-        free(trav2);
-    }
-    if (strategy == 3) {free(next);}
 
 
 
@@ -96,8 +88,8 @@ void *mymalloc(size_t requested) {
         printf("Can not allocate memory of given size %zu \n", requested);
         return NULL;
     }
-    assert((int) myStrategy > 0);
-    assert( requested >= 1);
+    //assert((int) myStrategy > 0);
+    //assert( requested >= 1);
 
     struct memoryList *temp = head;
     struct memoryList *foundblock = NULL;
