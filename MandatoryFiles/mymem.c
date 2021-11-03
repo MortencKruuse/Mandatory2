@@ -73,7 +73,7 @@ void initmem(strategies strategy, size_t sz) {
     head->alloc = 0;
     //Setting the pointer for our doubly linked list to point to our block of memory that we've allocated
     head->ptr = myMemory;
-    /* TODO: Initialize memory management structure. Done */
+
     head->last = head;
     head->next = head;
 }
@@ -249,20 +249,6 @@ void myfree(void *block) {
  */
 
 /* Get the number of contiguous areas of free space in memory. */
-/*
-int mem_holes() {
-    int i = 0;
-    struct memoryList *current = head;
-    do {
-        if (current->last->alloc == 0 && current->next->alloc != 0) { // alloc == 0?
-            i++;
-        }
-        current = current->next;
-    } while (current != head);
-    return i;
-}
-
- */
 int mem_holes() {
     int i = 0;
     struct memoryList *current = head;
@@ -447,7 +433,7 @@ void print_memory_status() {
  * We have given you a simple example to start.
  */
 
-/*
+
 void try_mymem(int argc, char **argv) {
     strategies strat;
     void *a, *b, *c, *d, *e;
@@ -457,8 +443,8 @@ void try_mymem(int argc, char **argv) {
         strat = First;
 
 
-     A simple example.
-       Each algorithm should produce a different layout.
+     /*A simple example.
+       Each algorithm should produce a different layout.*/
 
     initmem(strat, 500);
 
@@ -474,9 +460,9 @@ void try_mymem(int argc, char **argv) {
     print_memory_status();
 
 }
-*/
 
-void try_mymem() {
+
+void try_mymem2() {
     strategies strat;
     void *a, *b, *c, *d, *e, *f, *g, *h;
     strat = First;
@@ -485,7 +471,7 @@ void try_mymem() {
     Each algorithm should produce a different layout.*/
     initmem(strat, 500);
 
-    // TODO If a gets allocated more than 0 memory everything dies. See TODO above "myfree(a)".
+
 
     a = mymalloc(100);
     b = mymalloc(200);
@@ -498,23 +484,8 @@ void try_mymem() {
     g =mymalloc(10);
     myfree(f);
     h = mymalloc(10);
-    // TODO Attach debug boii right below this line. Follow it until you are in mymfree right before "free(previousBlock)". Look at the next pointers. They the same as the current blocks.
     print_memory();
     print_memory_status();
 
     initmem(strat, 500);
-
-    // TODO If a gets allocated more than 0 memory everything dies. See TODO above "myfree(a)".
-
-    a = mymalloc(100);
-    b = mymalloc(200);
-    c = mymalloc(50);
-    myfree(b);
-    d = mymalloc(50);
-    e = mymalloc(40);
-    myfree(d);
-    f = mymalloc(50);
-    g =mymalloc(10);
-    myfree(f);
-    h = mymalloc(10);
 }

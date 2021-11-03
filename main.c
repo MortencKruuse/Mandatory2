@@ -2,5 +2,5 @@
 
 
 int main() {
-    try_mymem();
+    try_mymem2();
 }
