@@ -321,8 +321,18 @@ int mem_small_free(int size) {
     return i;
 }
 
+// returns the alloc status of a block
 char mem_is_alloc(void *ptr) {
-    return 0;
+    struct memoryList *current = head;
+    do {
+        if (current->ptr == ptr){
+            return current->alloc;
+        }
+        current = current->next;
+    } while (current != head);
+
+    printf("ptr is not found");
+    return NULL;
 }
 
 /* 
