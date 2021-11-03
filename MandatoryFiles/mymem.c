@@ -93,7 +93,8 @@ void *mymalloc(size_t requested) {
 
     switch (myStrategy) {
         case NotSet:
-            return printf("err", "Strategy not implemented.");
+            printf("err, Strategy not implemented.");
+            return NULL;
 
         case First:
             do {
@@ -145,7 +146,8 @@ void *mymalloc(size_t requested) {
             }
 
             do {
-                if (start >= requested && start->alloc == 0) {
+                if (start->alloc == 0 &&
+                start->size >= requested) {
                     foundblock = start;
                     found = true;
                     break;
@@ -207,7 +209,8 @@ void myfree(void *block) {
     } while (current != head);
     // Check if the last block has 0 allocated. If so then it should be combined with the current block.
     if (found) {
-        if (current->last->alloc == 0) {
+        if (current->last->alloc == 0 &&
+            current->ptr != head->ptr) {
             struct memoryList *previousBlock = current->last;
             // Combine the size of current with the size of the previous block
             current->size = (previousBlock->size) + (current->size);
@@ -218,7 +221,8 @@ void myfree(void *block) {
             free(previousBlock);
         }
         // Check if the next block has 0 allocated. If so then it should be combined with the current block.
-        if (current->next->alloc == 0) {
+        if (current->next->alloc == 0 &&
+            current->next != head) {
             struct memoryList *nextBlock = current->next;
             // Combine the size of current with the size of the next block
             current->size = (nextBlock->size) + (current->size);
@@ -239,11 +243,25 @@ void myfree(void *block) {
  */
 
 /* Get the number of contiguous areas of free space in memory. */
+/*
 int mem_holes() {
     int i = 0;
     struct memoryList *current = head;
     do {
-        if (current->last->alloc == 0 && current->next->alloc != 0) {
+        if (current->last->alloc == 0 && current->next->alloc != 0) { // alloc == 0?
+            i++;
+        }
+        current = current->next;
+    } while (current != head);
+    return i;
+}
+
+ */
+int mem_holes() {
+    int i = 0;
+    struct memoryList *current = head;
+    do {
+        if (current->alloc == 0) { // alloc == 0?
             i++;
         }
         current = current->next;
@@ -282,7 +300,7 @@ int mem_largest_free() {
     int i = 0;
     struct memoryList *current = head;
     do {
-        if (current->alloc != 0 & i < current->alloc) {
+        if (current->alloc == 0 && i < current->size) { //alloc = size?
             i = current->size;
         }
         current = current->next;
@@ -295,7 +313,7 @@ int mem_small_free(int size) {
     int i = 0;
     struct memoryList *current = head;
     do {
-        if (current->alloc != 0 && current->size <= size) {
+        if (current->alloc == 0 && current->size <= size) {
             i++;
         }
         current = current->next;
@@ -445,7 +463,7 @@ void try_mymem(int argc, char **argv) {
 void try_mymem() {
     strategies strat;
     void *a, *b, *c, *d, *e, *f, *g, *h;
-    strat = Best;
+    strat = First;
 
     /*A simple example.
     Each algorithm should produce a different layout.*/
@@ -467,4 +485,5 @@ void try_mymem() {
     // TODO Attach debug boii right below this line. Follow it until you are in mymfree right before "free(previousBlock)". Look at the next pointers. They the same as the current blocks.
     print_memory();
     print_memory_status();
+
 }
