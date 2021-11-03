@@ -86,7 +86,7 @@ void *mymalloc(size_t requested) {
     assert( requested >= 1);
 
     struct memoryList *temp = head;
-    struct memoryList *foundblock = head;
+    struct memoryList *foundblock = NULL;
     struct memoryList *start = next;
 
     bool found = false;
@@ -94,9 +94,11 @@ void *mymalloc(size_t requested) {
     switch (myStrategy) {
         case NotSet:
             return printf("err", "Strategy not implemented.");
+
         case First:
             do {
-                if (temp->size >= requested && temp->alloc == 0) {
+                if (temp->size >= requested &&
+                temp->alloc == 0) {
                     foundblock = temp;
                     found = true;
                     break;
@@ -106,15 +108,18 @@ void *mymalloc(size_t requested) {
             break;
 
         case Best:
-
             do{
-                if(temp->size - requested >= 0 && (temp->size - requested) <= (foundblock->size - requested) && temp->alloc == 0){
+                if(temp->alloc == 0 &&
+                temp->size >= requested &&
+                (foundblock==NULL ||
+                temp->size < foundblock->size)){
                     foundblock = temp;
                 }
                 temp = temp->next;
             } while (temp !=head);
 
-            if(foundblock->size >= requested && foundblock->alloc == 0 ){
+            if(foundblock->alloc == 0 &&
+                foundblock->size >= requested ){
                 found = true;
                 break;
             } else break;
@@ -122,8 +127,10 @@ void *mymalloc(size_t requested) {
         case Worst:
 
             do{
-                if(temp->size > foundblock->size && temp->alloc == 0){
-                    foundblock = temp;
+                if((foundblock== NULL ||
+                    temp->size > foundblock->size) &&
+                    temp->alloc == 0){
+                        foundblock = temp;
                 }
                 temp = temp->next;
             } while (temp !=head);
@@ -438,7 +445,7 @@ void try_mymem(int argc, char **argv) {
 void try_mymem() {
     strategies strat;
     void *a, *b, *c, *d, *e, *f, *g, *h;
-    strat = Next;
+    strat = Best;
 
     /*A simple example.
     Each algorithm should produce a different layout.*/
