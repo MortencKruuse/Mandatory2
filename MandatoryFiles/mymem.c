@@ -61,7 +61,6 @@ void initmem(strategies strategy, size_t sz) {
     else free(head);
 
     //free next*
-
     if (next != NULL) {
         for (trav2 = next; trav2->next != NULL; trav2 = trav2->next) {
             free(trav2->last);
