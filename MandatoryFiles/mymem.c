@@ -86,8 +86,9 @@ void *mymalloc(size_t requested) {
     assert( requested >= 1);
 
     struct memoryList *temp = head;
-    struct memoryList *foundblock;
+    struct memoryList *foundblock = head;
     struct memoryList *start = next;
+
     bool found = false;
 
     switch (myStrategy) {
@@ -107,11 +108,12 @@ void *mymalloc(size_t requested) {
         case Best:
 
             do{
-                if(temp->size - requested >= 0 && (temp->size - requested) < (foundblock->size - requested) && temp->alloc == 0){
+                if(temp->size - requested >= 0 && (temp->size - requested) <= (foundblock->size - requested) && temp->alloc == 0){
                     foundblock = temp;
                 }
                 temp = temp->next;
             } while (temp !=head);
+
             if(foundblock->size >= requested){
                 found = true;
                 break;
@@ -131,14 +133,18 @@ void *mymalloc(size_t requested) {
             } else break;
 
         case Next:
+            if(start == NULL){
+                start = head;
+            }
+
             do {
-                if (next >= requested && next->alloc == 0) {
-                    foundblock = temp;
+                if (start >= requested && start->alloc == 0) {
+                    foundblock = start;
                     found = true;
                     break;
                 }
-                temp = temp->next;
-            } while (next->next != start);
+                start = start->next;
+            } while (start->next != next);
             break;
     }
 
@@ -162,6 +168,7 @@ void *mymalloc(size_t requested) {
             leftovers->ptr = foundblock->ptr + requested;
 
             //for later next* should be updated here
+            //next = foundblock->next;
         } else { next = foundblock->next; }
 
         foundblock->alloc = 1;
