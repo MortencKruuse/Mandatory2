@@ -114,7 +114,7 @@ void *mymalloc(size_t requested) {
                 temp = temp->next;
             } while (temp !=head);
 
-            if(foundblock->size >= requested){
+            if(foundblock->size >= requested && foundblock->alloc == 0){
                 found = true;
                 break;
             } else break;
@@ -438,7 +438,7 @@ void try_mymem(int argc, char **argv) {
 void try_mymem() {
     strategies strat;
     void *a, *b, *c, *d, *e, *f, *g;
-    strat = Next;
+    strat = Best;
 
     /*A simple example.
     Each algorithm should produce a different layout.*/
@@ -451,8 +451,9 @@ void try_mymem() {
     b = mymalloc(200);
     print_memory();
     c = mymalloc(50);
-    print_memory();
+    print_memory_with_id('0');
     myfree(b);
+    print_memory_with_id('1');
     d = mymalloc(50);
     e = mymalloc(40);
     myfree(d);
