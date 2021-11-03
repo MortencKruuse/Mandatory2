@@ -275,7 +275,6 @@ int test_alloc_2(int argc, char **argv) {
 
 		if (mem_holes() != correct_holes)
 		{
-            print_memory();
 			printf("Holes counted as %d, should be %d with %s\n", mem_holes(), correct_holes, strategy_name(strategy));
 			return	1;
 		}
