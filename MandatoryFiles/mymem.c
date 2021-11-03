@@ -16,7 +16,7 @@ struct memoryList {
 
     int size;            // How many bytes in this block?
     char alloc;          // 1 if this block is allocated,
-    // 0 if this block is free.
+                         // 0 if this block is free.
     void *ptr;           // location of block in memory pool.
 };
 
@@ -45,25 +45,30 @@ void initmem(strategies strategy, size_t sz) {
     mySize = sz;
 
     struct memoryList *trav;
+    struct memoryList *trav2;
+
+    //free myMemory
     if (myMemory != NULL) free(myMemory); /* in case this is not the first time initmem2 is called */
-    /* TODO: release any other memory you were using for bookkeeping when doing a re-initialization! Maybe this works? */
+
+    //free head*
     if (head != NULL) {
         for (trav = head; trav->next != NULL; trav = trav->next) {
             free(trav->last);
-            free(trav);
-        }
 
+        }
+        free(trav);
     }
-    free(head);
+    else free(head);
+
+    //free next*
 
     if (next != NULL) {
-        for (trav = next; trav->next != NULL; trav = trav->next) {
-            free(trav->last);
-            free(trav);
+        for (trav2 = next; trav2->next != NULL; trav2 = trav2->next) {
+            free(trav2->last);
         }
-
+        free(trav2);
     }
-    free(next);
+    if (strategy == 3) {free(next);}
 
 
 
@@ -506,4 +511,19 @@ void try_mymem() {
     print_memory();
     print_memory_status();
 
+    initmem(strat, 500);
+
+    // TODO If a gets allocated more than 0 memory everything dies. See TODO above "myfree(a)".
+
+    a = mymalloc(100);
+    b = mymalloc(200);
+    c = mymalloc(50);
+    myfree(b);
+    d = mymalloc(50);
+    e = mymalloc(40);
+    myfree(d);
+    f = mymalloc(50);
+    g =mymalloc(10);
+    myfree(f);
+    h = mymalloc(10);
 }
